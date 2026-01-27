@@ -12,7 +12,6 @@ const useProducts = () => {
             try {
                 setLoading(true);
                 const products = await fetchProducts();
-                console.log("Products from hooks"+products.toJ  )
                 if(isMounted) setData(products);
             } catch (err) {
                 if(isMounted) setError(err.message);

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 const ProductCard = ({product}) => {
-    console.log(product);
+    //console.log(product);
   return (
     <Link
     to={`/products/${product.id}`}
