@@ -9,7 +9,6 @@ const ProductDetail = () => {
   
   if(loading) return <p>Loading...</p>
   if(error) return <p>Error</p>
-  console.log(data);
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">

@@ -5,6 +5,5 @@ export const fetchProducts = () => {
 };
 
 export const fetchProductById = (id) => {
-  console.log("In fetch",id);
   return apiClient(`/products/${id}`);
 };
