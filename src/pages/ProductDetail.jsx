@@ -34,7 +34,7 @@ const ProductDetail = () => {
 
           {/* Rating */}
           <div className="flex items-center gap-2 mb-4">
-            <StarRating rating={data.rating.rate} />
+            <StarRating rating={data.rating} />
             <span className="text-sm text-gray-600">({data.rating.count} reviews)</span>
           </div>
 

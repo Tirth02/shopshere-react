@@ -12,7 +12,7 @@ const useProducts = () => {
             try {
                 setLoading(true);
                 const products = await fetchProducts();
-                if(isMounted) setData(products);
+                if(isMounted) setData(products.data);
             } catch (err) {
                 if(isMounted) setError(err.message);
             } finally {
