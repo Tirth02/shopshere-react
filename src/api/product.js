@@ -1,7 +1,7 @@
 import { apiClient } from './client';
 
-export const fetchProducts = () => {
-  return apiClient('/products?page=1&limit=10');
+export const fetchProducts = (page = 1) => {
+  return apiClient(`/products?page=${page}&limit=10`);
 };
 
 export const fetchProductById = (id) => {
