@@ -1,12 +1,28 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import useProducts from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
+import FilterBar from "../components/FilterBar";
 
 const ProductList = () => {
   const { products, loadMore, loading, error, hasMore } =
     useProducts();
   console.log(products);
   const loaderRef = useRef(null);
+  
+  const [category,setCategory] = useState("all");
+
+  const categories = useMemo(() => {
+    if(!products.length) return [];
+    return ["all",...new Set(products.map(p => p.category))];
+  },[products])
+
+  const filteredProducts = useMemo(()=>{
+    return products.filter((p) => {
+      const matchCategory = category == "all" || p.category == category;
+
+      return matchCategory;
+    })
+  },[products,category])
   useEffect(() => {
     if (loading || !hasMore) return;
 
@@ -32,11 +48,12 @@ const ProductList = () => {
   // if (products.length === 0) return <p>No products found</p>;
   return (
     <div className="p-4 flex flex-col">
+      <FilterBar categories={categories} category={category} onCategoryChange={setCategory}/>
       <h1 className="text-2xl font-bold mb-6">Products</h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {filteredProducts.map((product) => (
+          <ProductCard key={product._id} product={product} />
         ))}
       </div>
       {/* <button
