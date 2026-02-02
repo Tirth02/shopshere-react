@@ -14,6 +14,13 @@ const ProductList = () => {
   const [category, setCategory] = useState(searchParams.get("category") || "all");
   const [sort, setSort] = useState(searchParams.get("sort") || "");
 
+  const hasActiveFilters = category !== "all" || sort !== "";
+
+  const handleReset = () => {
+  setCategory("all");
+  setSort("");
+};
+
   useEffect(() => {
     if (loading || !hasMore) return;
 
@@ -93,6 +100,8 @@ const ProductList = () => {
         onCategoryChange={setCategory}
         sort={sort}
         onSortChange={setSort}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={handleReset}
       />
       <h1 className="text-2xl font-bold mb-6">Products</h1>
 

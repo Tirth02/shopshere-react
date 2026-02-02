@@ -1,6 +1,6 @@
 import React from "react";
 
-const FilterBar = ({ categories, category, onCategoryChange,sort, onSortChange }) => {
+const FilterBar = ({ categories, category, onCategoryChange,sort, onSortChange,hasActiveFilters,onResetFilters }) => {
   return (
     <div className="flex flex-wrap items-center gap-4 mb-6 ">
       <div className="flex items-center gap-2">
@@ -43,6 +43,14 @@ const FilterBar = ({ categories, category, onCategoryChange,sort, onSortChange }
           <option value="newest">Newest</option>
         </select>
       </div>
+      <button
+        onClick={onResetFilters}
+        disabled={!hasActiveFilters}
+          className="self-start sm:self-auto px-4 py-2 rounded-lg border border-gray-300
+                     text-gray-600 hover:bg-gray-100 transition"
+        >
+          Clear Filters
+        </button>
     </div>
   );
 };
