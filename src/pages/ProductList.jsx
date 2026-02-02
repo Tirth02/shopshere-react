@@ -2,19 +2,54 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import useProducts from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 import FilterBar from "../components/FilterBar";
+import { useSearchParams } from "react-router-dom";
 
 const ProductList = () => {
   const { products, loadMore, loading, error, hasMore } = useProducts();
   console.log(products);
   const loaderRef = useRef(null);
 
-  const [category, setCategory] = useState("all");
-  const [sort, setSort] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [category, setCategory] = useState(searchParams.get("category") || "all");
+  const [sort, setSort] = useState(searchParams.get("sort") || "");
+
+  useEffect(() => {
+    if (loading || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "200px",
+        threshold: 0,
+      },
+    );
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => {
+      if (loaderRef.current) observer.disconnect();
+    };
+  }, [loading, hasMore, loadMore]);
 
   const categories = useMemo(() => {
     if (!products.length) return [];
     return ["all", ...new Set(products.map((p) => p.category))];
   }, [products]);
+
+
+  useEffect(() => {
+    const params = {}
+
+    if(category != "all") params.category = category;
+    if(sort != "") params.sort = sort;
+
+    setSearchParams(params, { replace: true });
+
+  },[category,sort,setSearchParams])
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -47,26 +82,6 @@ const ProductList = () => {
     }
     return result;
   }, [products, category, sort]);
-  useEffect(() => {
-    if (loading || !hasMore) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          loadMore();
-        }
-      },
-      {
-        root: null,
-        rootMargin: "200px",
-        threshold: 0,
-      },
-    );
-    if (loaderRef.current) observer.observe(loaderRef.current);
-    return () => {
-      if (loaderRef.current) observer.disconnect();
-    };
-  }, [loading, hasMore, loadMore]);
   if (error) return <p>Error</p>;
   if (!Array.isArray(products)) console.log("Invalid Data");
   // if (products.length === 0) return <p>No products found</p>;
