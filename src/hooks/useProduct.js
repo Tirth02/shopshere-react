@@ -13,7 +13,7 @@ const useProduct = (id) => {
                 setLoading(true);
                 const product = await fetchProductById(id);
                 if(isMounted) setData(product);
-                console.log(product);
+                // console.log(product);
             } catch (err) {
                 if(isMounted) setError(err.message);
             } finally{

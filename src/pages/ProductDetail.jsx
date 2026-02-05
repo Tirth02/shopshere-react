@@ -6,12 +6,12 @@ import { useCart } from "../context/CartContext";
 const ProductDetail = () => {
   const {id} = useParams();
   
-  const {state} = useCart();
+  const {cart,setCart} = useCart();
   const {data,loading,error} = useProduct(id);
   
   if(loading) return <p>Loading...</p>
   if(error) return <p>Error</p>
-  console.log(state);
+  console.log(cart);
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -61,7 +61,9 @@ const ProductDetail = () => {
 
           {/* Actions */}
           <div className="flex gap-4">
-            <button className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition">
+            <button className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition" onClick={() =>{
+              setCart([...cart,data]);
+            }}>
               Add to Cart
             </button>
             <button className="border px-6 py-3 rounded hover:bg-gray-100 transition">
