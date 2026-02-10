@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useProduct from "../hooks/useProduct";
 import StarRating from "../components/StarRating";
 import { useCart } from "../context/CartContext";
@@ -82,9 +82,11 @@ const ProductDetail = () => {
 
           {/* Actions */}
           <div className="flex gap-4">
-            <button className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition" onClick={AddToCart}>
-              Add to Cart
-            </button>
+            <Link to="/cart">
+              <button className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition" onClick={AddToCart}>
+                Add to Cart
+              </button>
+            </Link>
             <button className="border px-6 py-3 rounded hover:bg-gray-100 transition">
               Buy Now
             </button>

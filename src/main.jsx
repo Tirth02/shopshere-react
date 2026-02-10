@@ -10,6 +10,7 @@ import MainLayout from './layouts/MainLayout.jsx'
 import AdminLayout from './layouts/AdminLayout.jsx'
 import AddProduct from './pages/Admin/AddProduct.jsx'
 import { CartProvider } from './context/CartContext.jsx'
+import CartPage from './pages/CartPage.jsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/products/:id",
         element: <ProductDetail/>
+      },
+      {
+        path: "/cart",
+        element: <CartPage/>
       },
       {
         path: "/admin",
