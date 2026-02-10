@@ -11,6 +11,27 @@ const ProductDetail = () => {
   
   if(loading) return <p>Loading...</p>
   if(error) return <p>Error</p>
+
+  const AddToCart = () =>{
+    const existingItem = cart.find(item => item._id === data._id);
+    if(existingItem)
+    {
+      const updatedCart = cart.map(item => {
+        return {...item,quantity: item.quantity+1};
+      })
+      setCart(updatedCart);
+      console.log("Item exist in cart");
+    }
+    else
+    {
+      console.log("Item doesn't exist in cart");
+      const newItem = {
+        ...data,
+        quantity:1
+      };
+      setCart([...cart,newItem]);  
+    } 
+  }
   console.log(cart);
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -61,9 +82,7 @@ const ProductDetail = () => {
 
           {/* Actions */}
           <div className="flex gap-4">
-            <button className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition" onClick={() =>{
-              setCart([...cart,data]);
-            }}>
+            <button className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition" onClick={AddToCart}>
               Add to Cart
             </button>
             <button className="border px-6 py-3 rounded hover:bg-gray-100 transition">
