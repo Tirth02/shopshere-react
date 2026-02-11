@@ -1,7 +1,24 @@
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import EmptyCartShow from "../components/EmptyCartShow";
 
 const CartPage = () => {
   const { cart, setCart } = useCart();
+
+  const removeFromCart = (id) =>{
+    const filteredCart = cart.filter(function(item){
+        if(item._id == id) return false;
+        return true;
+    }) 
+    setCart(filteredCart)
+    
+  }
+ 
+  if (!cart || cart.length == 0) {
+    return (
+      <EmptyCartShow/>
+    );
+  }
   console.log("cart items in cart page", cart);
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -32,7 +49,7 @@ const CartPage = () => {
                     <button className="px-3 py-1 border-l">+</button>
                   </div>
 
-                  <button className="text-sm text-red-500 hover:underline">
+                  <button onClick={() => removeFromCart(item._id)} className="text-sm text-red-500 hover:underline">
                     Remove
                   </button>
                 </div>
