@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import EmptyCartShow from "../components/EmptyCartShow";
+import CartSummary from "../components/CartSummary";
 
 const CartPage = () => {
   const { cart, setCart } = useCart();
@@ -10,10 +11,13 @@ const CartPage = () => {
         if(item._id == id) return false;
         return true;
     }) 
-    setCart(filteredCart)
-    
+    setCart(filteredCart)  
   }
- 
+
+  const totalQuantity = cart.reduce((accumulator,curr) => accumulator + curr.quantity,0);
+  const subTotal = cart.reduce((acc,item) => acc + item.price*item.quantity,0);
+  console.log("Total price of cart page is "+subTotal);
+  
   if (!cart || cart.length == 0) {
     return (
       <EmptyCartShow/>
@@ -59,30 +63,7 @@ const CartPage = () => {
         </div>
 
         {/* RIGHT: Summary */}
-        <div className="border rounded-lg p-6 h-fit">
-          <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-
-          <div className="flex justify-between text-sm mb-2">
-            <span>Items</span>
-            <span>3</span>
-          </div>
-
-          <div className="flex justify-between text-sm mb-4">
-            <span>Subtotal</span>
-            <span>$360</span>
-          </div>
-
-          <hr className="mb-4" />
-
-          <div className="flex justify-between font-bold text-lg mb-6">
-            <span>Total</span>
-            <span>$360</span>
-          </div>
-
-          <button className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition">
-            Checkout
-          </button>
-        </div>
+        <CartSummary totalQuantity={totalQuantity} subTotal={subTotal}/>
       </div>
     </div>
   );

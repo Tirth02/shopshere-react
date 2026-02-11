@@ -16,8 +16,13 @@ const ProductDetail = () => {
     const existingItem = cart.find(item => item._id === data._id);
     if(existingItem)
     {
+      
       const updatedCart = cart.map(item => {
-        return {...item,quantity: item.quantity+1};
+        if(item._id == data._id)
+        {
+          return {...item,quantity: item.quantity+1};
+        }
+        return item;
       })
       setCart(updatedCart);
       console.log("Item exist in cart");
