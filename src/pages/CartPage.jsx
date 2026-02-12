@@ -104,7 +104,7 @@ const CartPage = () => {
         </div>
 
         {/* RIGHT: Summary */}
-        <CartSummary totalQuantity={totalQuantity} subTotal={subTotal} />
+        <CartSummary cart={cart} totalQuantity={totalQuantity} subTotal={subTotal} />
       </div>
     </div>
   );
