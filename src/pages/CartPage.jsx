@@ -6,22 +6,49 @@ import CartSummary from "../components/CartSummary";
 const CartPage = () => {
   const { cart, setCart } = useCart();
 
-  const removeFromCart = (id) =>{
-    const filteredCart = cart.filter(function(item){
-        if(item._id == id) return false;
-        return true;
-    }) 
-    setCart(filteredCart)  
-  }
+  const removeFromCart = (id) => {
+    const filteredCart = cart.filter(function (item) {
+      if (item._id == id) return false;
+      return true;
+    });
+    setCart(filteredCart);
+  };
 
-  const totalQuantity = cart.reduce((accumulator,curr) => accumulator + curr.quantity,0);
-  const subTotal = cart.reduce((acc,item) => acc + item.price*item.quantity,0);
-  console.log("Total price of cart page is "+subTotal);
-  
+  const totalQuantity = cart.reduce(
+    (accumulator, curr) => accumulator + curr.quantity,
+    0,
+  );
+  const subTotal = cart.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  );
+
+  const increaseQuantity = (id) => {
+    const updatedIncrementalCart = cart.map((item) => {
+      if (item._id === id) {
+        return { ...item, quantity: item.quantity + 1 };
+      }
+      return item;
+    });
+    setCart(updatedIncrementalCart);
+  };
+
+  const decreaseQuantity = (id) => {
+    const clickedItem = cart.find((item) => item._id === id);
+
+    if (clickedItem.quantity === 1) removeFromCart(id);
+    else {
+      const updatedDecrementalCart = cart.map((item) => {
+        if (item._id === id) {
+          return { ...item, quantity: item.quantity - 1 };
+        }
+        return item;
+      });
+      setCart(updatedDecrementalCart);
+    }
+  };
   if (!cart || cart.length == 0) {
-    return (
-      <EmptyCartShow/>
-    );
+    return <EmptyCartShow />;
   }
   console.log("cart items in cart page", cart);
   return (
@@ -48,12 +75,25 @@ const CartPage = () => {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center border rounded">
-                    <button className="px-3 py-1 border-r">−</button>
+                    <button
+                      className="px-3 py-1 border-r cursor-pointer"
+                      onClick={() => decreaseQuantity(item._id)}
+                    >
+                      −
+                    </button>
                     <span className="px-4 py-1">{item.quantity}</span>
-                    <button className="px-3 py-1 border-l">+</button>
+                    <button
+                      className="px-3 py-1 border-l cursor-pointer"
+                      onClick={() => increaseQuantity(item._id)}
+                    >
+                      +
+                    </button>
                   </div>
 
-                  <button onClick={() => removeFromCart(item._id)} className="text-sm text-red-500 hover:underline">
+                  <button
+                    onClick={() => removeFromCart(item._id)}
+                    className="text-sm text-red-500 hover:underline"
+                  >
                     Remove
                   </button>
                 </div>
@@ -63,7 +103,7 @@ const CartPage = () => {
         </div>
 
         {/* RIGHT: Summary */}
-        <CartSummary totalQuantity={totalQuantity} subTotal={subTotal}/>
+        <CartSummary totalQuantity={totalQuantity} subTotal={subTotal} />
       </div>
     </div>
   );
