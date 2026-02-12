@@ -36,6 +36,7 @@ const CartPage = () => {
   const decreaseQuantity = (id) => {
     const clickedItem = cart.find((item) => item._id === id);
 
+    if (!clickedItem) return;
     if (clickedItem.quantity === 1) removeFromCart(id);
     else {
       const updatedDecrementalCart = cart.map((item) => {
