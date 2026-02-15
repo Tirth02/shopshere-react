@@ -2,46 +2,44 @@ import { Link, useParams } from "react-router-dom";
 import useProduct from "../hooks/useProduct";
 import StarRating from "../components/StarRating";
 import { useCart } from "../context/CartContext";
+import { useState } from "react";
 
 const ProductDetail = () => {
-  const {id} = useParams();
-  
-  const {cart,setCart} = useCart();
-  const {data,loading,error} = useProduct(id);
-  
-  if(loading) return <p>Loading...</p>
-  if(error) return <p>Error</p>
+  const { id } = useParams();
 
-  const AddToCart = () =>{
-    const existingItem = cart.find(item => item._id === data._id);
-    if(existingItem)
-    {
-      
-      const updatedCart = cart.map(item => {
-        if(item._id == data._id)
-        {
-          return {...item,quantity: item.quantity+1};
+  const { cart, setCart } = useCart();
+  const { data, loading, error } = useProduct(id);
+  const[quantity,setQuantity] = useState(1);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error</p>;
+
+  const AddToCart = () => {
+    const existingItem = cart.find((item) => item._id === data._id);
+    if (existingItem) {
+      const updatedCart = cart.map((item) => {
+        if (item._id == data._id) {
+          const newQuantity = item.quantity + quantity;
+          return { ...item, quantity: newQuantity > data.stock ? data.stock: newQuantity };
         }
         return item;
-      })
+      });
       setCart(updatedCart);
       console.log("Item exist in cart");
-    }
-    else
-    {
+    } else {
       console.log("Item doesn't exist in cart");
       const newItem = {
         ...data,
-        quantity:1
+        quantity: quantity,
       };
-      setCart([...cart,newItem]);  
-    } 
-  }
+      setCart([...cart, newItem]);
+    }
+    setQuantity(1);
+  };
   console.log(cart);
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        
         {/* LEFT: Image Section */}
         <div className="border rounded-lg p-6 flex items-center justify-center">
           <img
@@ -53,18 +51,16 @@ const ProductDetail = () => {
 
         {/* RIGHT: Product Info */}
         <div>
-          <h1 className="text-2xl font-bold mb-2">
-            {data.title}
-          </h1>
+          <h1 className="text-2xl font-bold mb-2">{data.title}</h1>
 
-          <p className="text-gray-500 text-sm mb-4">
-            {data.category}
-          </p>
+          <p className="text-gray-500 text-sm mb-4">{data.category}</p>
 
           {/* Rating */}
           <div className="flex items-center gap-2 mb-4">
             <StarRating rating={data.rating} />
-            <span className="text-sm text-gray-600">({data.rating.count} reviews)</span>
+            <span className="text-sm text-gray-600">
+              ({data.rating.count} reviews)
+            </span>
           </div>
 
           {/* Price */}
@@ -79,27 +75,32 @@ const ProductDetail = () => {
           <div className="flex items-center gap-4 mb-6">
             <span className="font-medium">Quantity</span>
             <div className="flex border rounded">
-              <button className="px-3 py-1 border-r">−</button>
-              <span className="px-4 py-1">1</span>
-              <button className="px-3 py-1 border-l">+</button>
+              <button className="px-3 py-1 border-r" onClick={() => {
+                if(quantity > 1) setQuantity(quantity-1);
+              }}>−</button>
+              <span className="px-4 py-1">{quantity}</span>
+              <button disabled={quantity >= data.stock} className="px-3 py-1 border-l" onClick={() => {
+                if(quantity < data.stock) setQuantity(quantity+1);
+              }}>+</button>
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex gap-4">
+            <button
+              className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition"
+              onClick={AddToCart}
+            >
+              Add to Cart
+            </button>
             <Link to="/cart">
-              <button className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition" onClick={AddToCart}>
-                Add to Cart
+              <button className="border px-6 py-3 rounded hover:bg-gray-100 transition" onClick={AddToCart}>
+                Buy Now
               </button>
             </Link>
-            <button className="border px-6 py-3 rounded hover:bg-gray-100 transition">
-              Buy Now
-            </button>
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 };
