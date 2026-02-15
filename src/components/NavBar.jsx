@@ -3,6 +3,7 @@ import { useCart } from "../context/CartContext";
 
 const NavBar = () => {
   const {cart} = useCart();
+  console.log("Cart in Navbar",cart);
   const totalQuantity = cart.reduce((acc,item) => acc+item.quantity,0);
   return (
     <header className="border-b bg-white">
