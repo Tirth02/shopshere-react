@@ -44,7 +44,7 @@ const ShopByCategory = () => {
 
           {/* NEW ARRIVALS */}
           <Link
-            to="/products?category=new"
+            to="/products?sort=newest"
             className="relative group overflow-hidden rounded-xl"
           >
             <img

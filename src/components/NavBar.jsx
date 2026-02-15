@@ -22,10 +22,10 @@ const NavBar = () => {
           <Link to="/products" className="hover:text-gray-500 transition">
             Shop
           </Link>
-          <Link to="#" className="hover:text-gray-500 transition">
+          <Link to="/products?category=men" className="hover:text-gray-500 transition">
             Men
           </Link>
-          <Link to="#" className="hover:text-gray-500 transition">
+          <Link to="/products?category=women" className="hover:text-gray-500 transition">
             Women
           </Link>
         </nav>
