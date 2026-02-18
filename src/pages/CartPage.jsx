@@ -6,9 +6,9 @@ import CartSummary from "../components/CartSummary";
 const CartPage = () => {
   const { cart, setCart } = useCart();
 
-  const removeFromCart = (id) => {
+  const removeFromCart = (id, size) => {
     const filteredCart = cart.filter(function (item) {
-      if (item._id == id) return false;
+      if (item._id == id && item.selectedSize == size) return false;
       return true;
     });
     setCart(filteredCart);
@@ -19,13 +19,16 @@ const CartPage = () => {
     0,
   );
   const subTotal = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) =>
+      acc +
+      (item.discountedPrice ? item.discountedPrice : item.price) *
+        item.quantity,
     0,
   );
 
-  const increaseQuantity = (id) => {
+  const increaseQuantity = (id, size) => {
     const updatedIncrementalCart = cart.map((item) => {
-      if (item._id === id) {
+      if (item._id === id && item.selectedSize == size && item.quantity < item.stock) {
         return { ...item, quantity: item.quantity + 1 };
       }
       return item;
@@ -33,14 +36,16 @@ const CartPage = () => {
     setCart(updatedIncrementalCart);
   };
 
-  const decreaseQuantity = (id) => {
-    const clickedItem = cart.find((item) => item._id === id);
+  const decreaseQuantity = (id, size) => {
+    const clickedItem = cart.find(
+      (item) => item._id === id && item.selectedSize == size,
+    );
 
     if (!clickedItem) return;
-    if (clickedItem.quantity === 1) removeFromCart(id);
+    if (clickedItem.quantity === 1) removeFromCart(id, size);
     else {
       const updatedDecrementalCart = cart.map((item) => {
-        if (item._id === id) {
+        if (item._id === id && item.selectedSize == size) {
           return { ...item, quantity: item.quantity - 1 };
         }
         return item;
@@ -60,7 +65,10 @@ const CartPage = () => {
         {/* LEFT: Cart Items */}
         <div className="lg:col-span-2 space-y-6">
           {cart.map((item) => (
-            <div key={item._id} className="flex gap-4 border rounded-lg p-4">
+            <div
+              key={`${item._id}-${item.selectedSize}`}
+              className="flex gap-4 border rounded-lg p-4"
+            >
               <img
                 src={item.image}
                 alt="Product"
@@ -72,27 +80,44 @@ const CartPage = () => {
 
                 <p className="text-sm text-gray-500 mb-2">{item.category}</p>
 
-                <p className="font-bold mb-4">${item.price}</p>
+                <p className="text-sm text-gray-600 mb-2">
+                  Size: {item.selectedSize}
+                </p>
+
+                {item.discountedPrice ? (
+                  <div className="mb-4">
+                    <span className="font-bold">${item.discountedPrice}</span>
+                    <span className="text-gray-400 line-through ml-2 text-sm">
+                      ${item.oldPrice}
+                    </span>
+                  </div>
+                ) : (
+                  <p className="font-bold mb-4">${item.price}</p>
+                )}
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center border rounded">
                     <button
                       className="px-3 py-1 border-r cursor-pointer"
-                      onClick={() => decreaseQuantity(item._id)}
+                      onClick={() =>
+                        decreaseQuantity(item._id, item.selectedSize)
+                      }
                     >
                       −
                     </button>
                     <span className="px-4 py-1">{item.quantity}</span>
                     <button
                       className="px-3 py-1 border-l cursor-pointer"
-                      onClick={() => increaseQuantity(item._id)}
+                      onClick={() =>
+                        increaseQuantity(item._id, item.selectedSize)
+                      }
                     >
                       +
                     </button>
                   </div>
 
                   <button
-                    onClick={() => removeFromCart(item._id)}
+                    onClick={() => removeFromCart(item._id, item.selectedSize)}
                     className="text-sm text-red-500 hover:underline"
                   >
                     Remove
@@ -104,7 +129,11 @@ const CartPage = () => {
         </div>
 
         {/* RIGHT: Summary */}
-        <CartSummary cart={cart} totalQuantity={totalQuantity} subTotal={subTotal} />
+        <CartSummary
+          cart={cart}
+          totalQuantity={totalQuantity}
+          subTotal={subTotal}
+        />
       </div>
     </div>
   );
