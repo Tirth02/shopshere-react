@@ -1,6 +1,18 @@
 import React from "react";
-
+import axios from "axios";
 const CartSummary = ({ cart, totalQuantity, subTotal }) => {
+  console.log("cart in cartSummary", cart);
+  const handleCheckout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/create-checkout-session",
+        { cart },
+      );
+      window.location.href = response.data.url;
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="border rounded-xl p-6 h-fit bg-gray-50 shadow-sm">
       <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
@@ -8,17 +20,12 @@ const CartSummary = ({ cart, totalQuantity, subTotal }) => {
       {/* ITEM LIST */}
       <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
         {cart.map((item) => (
-          <div
-            key={item._id}
-            className="flex justify-between text-sm"
-          >
+          <div key={item._id} className="flex justify-between text-sm">
             <span className="truncate max-w-[70%]">
               {item.title} × {item.quantity}
             </span>
 
-            <span className="font-medium">
-              $ {item.quantity * item.price}
-            </span>
+            <span className="font-medium">$ {item.quantity * item.discountedPrice}</span>
           </div>
         ))}
       </div>
@@ -48,10 +55,14 @@ const CartSummary = ({ cart, totalQuantity, subTotal }) => {
       {/* FINAL TOTAL */}
       <div className="flex justify-between font-bold text-lg mb-6">
         <span>Total</span>
-        <span>${subTotal + (subTotal*0.13)}</span>
+        <span>${subTotal + subTotal * 0.13}</span>
       </div>
 
-      <button className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition">
+      <button
+        onClick={handleCheckout}
+        disabled={cart.length === 0}
+        className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition"
+      >
         Checkout
       </button>
     </div>

@@ -11,6 +11,8 @@ import AdminLayout from './layouts/AdminLayout.jsx'
 import AddProduct from './pages/Admin/AddProduct.jsx'
 import { CartProvider } from './context/CartContext.jsx'
 import CartPage from './pages/CartPage.jsx'
+import PaymentSuccess from './pages/PaymentSuccess.jsx'
+import PaymentCancel from './pages/PaymentCancel.jsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -31,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage/>
+      },
+      {
+        path: "/payment-success",
+        element: <PaymentSuccess/>
+      },
+      {
+        path: "/payment-cancel",
+        element: <PaymentCancel/>
       },
       {
         path: "/admin",
