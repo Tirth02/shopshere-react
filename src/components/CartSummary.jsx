@@ -5,7 +5,7 @@ const CartSummary = ({ cart, totalQuantity, subTotal }) => {
   const handleCheckout = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/create-checkout-session",
+        "http://localhost:5000/api/checkout/create-checkout-session",
         { cart },
       );
       window.location.href = response.data.url;
