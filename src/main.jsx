@@ -13,6 +13,7 @@ import { CartProvider } from './context/CartContext.jsx'
 import CartPage from './pages/CartPage.jsx'
 import PaymentSuccess from './pages/PaymentSuccess.jsx'
 import PaymentCancel from './pages/PaymentCancel.jsx'
+import Register from './pages/Register.jsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -42,6 +43,11 @@ const router = createBrowserRouter([
         path: "/payment-cancel",
         element: <PaymentCancel/>
       },
+      {
+        path: "/register",
+        element: <Register/>
+      },
+
       {
         path: "/admin",
         element: <AdminLayout/>,
