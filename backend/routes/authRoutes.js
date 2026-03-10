@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/register", async(req,res) => {
     try {
+        console.log("backend signup route is hit with req ",req);
         const {name, email, password} = req.body;
 
         const existingUser = await User.findOne({ email });
@@ -31,6 +32,7 @@ router.post("/register", async(req,res) => {
 })
 
 router.post("/login", async(req,res) => {
+    console.log("In login Backend ",req);
     try {
         const {email, password} = req.body;
 

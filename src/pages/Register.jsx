@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
 
   const [formData,setFormData] = useState({
@@ -7,7 +8,7 @@ const Register = () => {
     email: "",
     password: "",
   });
-
+  const navigate = useNavigate();
   const [loading,setLoading] = useState(false);
   const [error,setError] = useState("");
   const [success,setSuccess] = useState("");
@@ -121,7 +122,13 @@ const Register = () => {
           </button>
 
         </form>
-
+        {/* Footer */}
+        <p className="text-sm text-center text-gray-500 mt-6">
+          Already have an account?{" "}
+          <span onClick={() => navigate("/login")} className="text-black font-medium cursor-pointer hover:underline">
+            Login
+          </span>
+        </p>
       </div>
     </div>
   );
