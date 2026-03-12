@@ -9,9 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function AvatarDropdown() {
-
+  const navigate = useNavigate();
   const {logOut} = useAuth();
   return (
     <DropdownMenu>
@@ -25,9 +26,10 @@ export function AvatarDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-32">
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/profile")}>Your Account</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/wishlist")}>WishList</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/my-orders")}>My Orders</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => navigate("/settings")}>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

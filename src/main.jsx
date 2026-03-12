@@ -17,6 +17,10 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Profile from "./pages/Profile";
+import WishList from "./pages/WishList";
+import Settings from "./pages/Settings";
+import Orders from "./pages/Orders";
 const router = createBrowserRouter([
   {
     element: <ProtectedRoute />, // everything below requires login
@@ -24,13 +28,18 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <MainLayout />,
-        children: [
+    children: [
           { path: "/", element: <Home /> },
           { path: "/products", element: <ProductList /> },
           { path: "/products/:id", element: <ProductDetail /> },
           { path: "/cart", element: <CartPage /> },
           { path: "/payment-success", element: <PaymentSuccess /> },
           { path: "/payment-cancel", element: <PaymentCancel /> },
+          {path: "/profile", element: <Profile/>},
+          {path: "/wishlist", element: <WishList/>},
+          {path: "/settings", element: <Settings/>},
+          {path: "/my-orders", element: <Orders/>},
+
         ],
       },
     ],
