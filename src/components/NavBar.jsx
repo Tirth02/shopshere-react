@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
+import { AvatarDropdown } from "./ui/AvatarDropdown";
+import { useAuth } from "@/context/AuthContext";
+
 const NavBar = () => {
   const {cart} = useCart();
+  const {user} = useAuth();
   console.log("Cart in Navbar",cart);
   const totalQuantity = cart.reduce((acc,item) => acc+item.quantity,0);
   return (
@@ -43,9 +47,11 @@ const NavBar = () => {
           </Link>
 
           {/* Auth Placeholder */}
-          <Link to="#" className="hover:text-gray-500 transition">
+          {!user && <Link to="#" className="hover:text-gray-500 transition">
             Login
-          </Link>
+          </Link>}
+
+          <AvatarDropdown/>
 
         </div>
       </div>
