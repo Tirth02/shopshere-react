@@ -47,7 +47,7 @@ const NavBar = () => {
           </Link>
 
           {/* Auth Placeholder */}
-          {!user && <Link to="#" className="hover:text-gray-500 transition">
+          {!user && <Link to="/login" className="hover:text-gray-500 transition">
             Login
           </Link>}
 
